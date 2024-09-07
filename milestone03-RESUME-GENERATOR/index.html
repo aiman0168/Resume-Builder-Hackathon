@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Interactive Resume Builder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+    <form id="resumeForm">
+        <header class="header">
+            <h1>Milestone1: Dynamic Resume Builder</h1>
+        </header>
+        <div class="container">
+        <!-- PERSONAL INFORMATION  -->
+        <section class="Personal-Info">
+        <h2>Personal-Info</h2>
+        <label for="profilePicture"><b>Profile Picture:</b></label>
+        <button><input type="file" id="profilePicture" name="profilePicture" accept="image">Choose a file</button><br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Full Name" required><br>
+        <p class="contact-info">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="email address" required><br>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Contact.no"><br>
+
+            <label for="linkedIn">LinkedIn:</label>
+            <input type="linkedIn" id="linkedIn" name="linkedIn" placeholder="LinkedIn Username"><br>
+
+            <label for="address">Address:</label>
+            <input type="address" id="address" name="address" placeholder="Address"><br>
+        </p>
+    </section>
+<!-- EDUCATION -->
+          
+           <section class="edu-item">
+            <div id="education">
+            <div class="education-entry">
+            <h2>Education</h2>
+            <label for="degree">Degree:</label>
+            <input type="text" name="degree[]" required><br>
+            <label for="institution">Institution:</label>
+            <input type="text" name="institution[]" required><br>
+            <label for="year">Year:</label>
+            <input type="text" name="year[]" required><br>
+        </div>
+    </div>
+            <button type="button" id="addEducation">Add Another Education</button>
+
+           </section>
+
+        <!-- SKILLS -->
+        <button id="toggle-button" class="button">Show Skills</button>
+         <div id="toggle-div" class="hidden">
+            <section class="skills" id="skills"><br>
+                <h2>Skills</h2>
+                <div id="skills">
+                    <div class="skill-entry field-container">
+                        <input type="text" name="skills[]"><br>
+                        <input type="text" name="skills[]"><br>
+                        <input type="text" name="skills[]"><br>
+                    </div>
+                </div>
+            </section>
+            <button type="button" id="addSkill">Add Another Skill</button>
+        </div>
+        
+
+        <!-- WORK EXPERIENCE     -->
+            <section  class="experience" id="experience">
+                <h2>Work Experience</h2>
+                <div id="workExperience">
+                    <div class="work-entry field-container">
+                <div class="job">
+                    <label for="jobTitle">Job Title:</label>
+                    <input type="text" name="jobTitle[]" required><br>
+                    <label for="company">Company:</label>
+                    <input type="text" name="company[]" required><br>
+                    <label for="jobYear">Year:</label>
+                    <input type="text" name="jobYear[]" required><br>
+                    
+                    <label for="jobDescription">Job Description:</label>
+                    <textarea name="jobDescription[]" rows="3" required></textarea><br>
+                </div>
+            </div>
+        </div>
+                <button type="button" id="addWorkExperience">Add Another Work Experience</button>
+            </section>
+
+            <button type="submit">Generate Resume</button>
+
+        </form>
+
+        <div id="resumeOutput" style="display: none;">
+            <h1>Resume</h1>
+            <div id="resumeContent"></div>
+        </div>
+        
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
+</div>
+</body>
+</html>
