@@ -1,126 +1,56 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('resumeForm') as HTMLFormElement;
-    const resumeOutput = document.getElementById('resumeOutput') as HTMLDivElement;
-    const resumeContent = document.getElementById('resumeContent') as HTMLDivElement;
-    const profilePictureInput = document.getElementById('profilePicture') as HTMLInputElement;
+document.getElementById('resumeForm')?.addEventListener('submit', function(event){
+    event.preventDefault();
+    const profilePictureInput =document.getElementById('profilePicture') as HTMLInputElement;
+    const nameElement = document.getElementById('name') as HTMLInputElement;
+    const emailElement = document.getElementById('email') as HTMLInputElement;
+    const phoneElement = document.getElementById('phone') as HTMLInputElement;
+    const linkedInElement = document.getElementById('linkedIn') as HTMLInputElement;
+    const addressElement = document.getElementById('address') as HTMLTextAreaElement;
+    const educationElement = document.getElementById('education') as HTMLTextAreaElement;
+    const skillElement = document.getElementById('skills') as HTMLTextAreaElement;
+    const experienceElement = document.getElementById('experience') as HTMLTextAreaElement;
 
-    const addEducationButton = document.getElementById('addEducation') as HTMLButtonElement;
-    const addWorkExperienceButton = document.getElementById('addWorkExperience') as HTMLButtonElement;
-    const addSkillButton = document.getElementById('addSkill') as HTMLButtonElement;
 
-    addEducationButton.addEventListener('click', () => {
-        const educationContainer = document.getElementById('education') as HTMLDivElement;
-        const newEducationEntry = document.createElement('div');
-        newEducationEntry.className = 'education-entry field-container';
-        newEducationEntry.innerHTML = `
-            <label for="degree">Degree:</label>
-            <input type="text" name="degree[]" readonly><br>
+    if (nameElement && emailElement && phoneElement && linkedInElement && addressElement && educationElement && skillElement && experienceElement){
+        const name = nameElement.value;
+        const email = emailElement.value;
+        const phone = phoneElement.value;
+        const linkedIn = linkedInElement.value;
+        const address = addressElement.value;
+        const education = educationElement.value;
+        const skills = skillElement.value;
+        const experience = experienceElement.value;
 
-            <label for="institution">Institution:</label>
-            <input type="text" name="institution[]" readonly><br>
+        const profilePictureFile = profilePictureInput.files?.[0]
+        const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictureFile) : "";
 
-            <label for="year">Year:</label>
-            <input type="text" name="year[]" readonly><br>
-        `;
-        educationContainer.appendChild(newEducationEntry);
-    });
 
-    addWorkExperienceButton.addEventListener('click', () => {
-        const workExperienceContainer = document.getElementById('workExperience') as HTMLDivElement;
-        const newWorkEntry = document.createElement('div');
-        newWorkEntry.className = 'work-entry field-container';
-        newWorkEntry.innerHTML = `
-            <label for="jobTitle">Job Title:</label>
-            <input type="text" name="jobTitle[]" readonly><br>
+    
+    const resumeOutput = `
+    <h2>Resume</h2>
+    ${profilePictureURL ? `<img src="${profilePictureURL} alt="Profile Picture" class= "profilePicture">` : "" }
+    <p><strong>Name:</strong>${name}</p>
+    <p><strong>Email:</strong>${email}</p>
+    <p><strong>Phone:</strong>${phone}</p>
+    <p><strong>LinkedIn:</strong>${linkedIn}</p>
+    <p><strong>Address:</strong>${address}</p>
 
-            <label for="company">Company:</label>
-            <input type="text" name="company[]" readonly><br>
+    <h3>Education</h3>
+    <p>${education}</p>
 
-            <label for="jobDescription">Job Description:</label>
-            <textarea name="jobDescription[]" rows="3" readonly></textarea><br>
-            
-            <label for="jobYear">Year:</label>
-            <input type="text" name="jobYear[]" readonly><br>
-        `;
-        workExperienceContainer.appendChild(newWorkEntry);
-    });
+    <h3>Skill</h3>
+    <p>${skills}</p>
 
-    addSkillButton.addEventListener('click', () => {
-        const skillsContainer = document.getElementById('skills') as HTMLDivElement;
-        const newSkillEntry = document.createElement('div');
-        newSkillEntry.className = 'skill-entry field-container';
-        newSkillEntry.innerHTML = `
-            <input type="text" name="skills[]" readonly><br>
-        `;
-        skillsContainer.appendChild(newSkillEntry);
-    });
+    <h3>Work Experience</h3>
+    <p>${experience}</p>`
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        const data = {
-            personalInfo: {
-                name: formData.get('name') as string,
-                email: formData.get('email') as string,
-                phone: formData.get('phone') as string,
-                linkedIn: formData.get('linkedIn') as string,
-                Address: formData.get('address') as string,
-            },
-            education: (formData.getAll('degree[]') as string[]).map((degree, index) => ({
-                degree,
-                institution: formData.getAll('institution[]')[index] as string,
-                year: formData.getAll('year[]')[index] as string
-            })),
-            workExperience: (formData.getAll('jobTitle[]') as string[]).map((jobTitle, index) => ({
-                jobTitle,
-                company: formData.getAll('company[]')[index] as string,
-                jobDescription: formData.getAll('jobDescription[]')[index] as string,
-                year: formData.getAll('jobYear[]')[index] as string
-            })),
-            skills: formData.getAll('skills[]') as string[]
-        };
-
-        // Handle file input (if needed)
-        const profilePictureFile = profilePictureInput.files?.[0];
-        let profilePictureUrl = '';
-        if (profilePictureFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                profilePictureUrl = e.target?.result as string;
-                generateResumeHtml(data, profilePictureUrl);
-            };
-            reader.readAsDataURL(profilePictureFile);
-        } else {
-            generateResumeHtml(data, profilePictureUrl);
-        }
-    });
-
-    function generateResumeHtml(data: any, profilePictureUrl: string): void {
-        resumeContent.innerHTML = `
-            ${profilePictureUrl ? `<img src="${profilePictureUrl}" alt="Profile Picture" style="max-width: 150px; max-height: 150px;"/>` : ''}
-            <h2>${data.personalInfo.name}</h2>
-            <p>Email: ${data.personalInfo.email}</p>
-            <p>Phone: ${data.personalInfo.phone}</p>
-            <p>LinkedIn: ${data.personalInfo.linkedIn}</p>
-            <p>Address: ${data.personalInfo.address}</p>
-
-            <h3>Education</h3>
-            ${data.education.map((edu: any) => `
-                <p>${edu.degree} from ${edu.institution} (${edu.year})</p>
-            `).join('')}
-
-            <h3>Work Experience</h3>
-            ${data.workExperience.map((work: any) => `
-                <p><strong>${work.jobTitle}</strong> at ${work.company} (${work.year})<br>
-                ${work.jobDescription}</p>
-            `).join('')}
-
-            <h3>Skills</h3>
-            <ul>
-                ${data.skills.map((skill: string) => `<li>${skill}</li>`).join('')}
-            </ul>
-        `;
-        resumeOutput.style.display = 'block';
+    const resumeOutputElement = document.getElementById('resumeOutput')
+    if(resumeOutputElement){
+        resumeOutputElement.innerHTML = resumeOutput
+    }else {
+        console.error('The resume output elements are missing')
     }
-});
+}else {
+    console.error('one or more output elements are missing')
+};
+})
